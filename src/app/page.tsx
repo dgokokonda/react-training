@@ -1,12 +1,30 @@
+'use client'
+
 import Image from 'next/image'
+// import { Counter } from './counter'
+import { BookItem } from '@/components/book-item'
+import { Counter } from '@/components/counter'
+import Context from '@/utils/context'
+import { useState } from 'react'
 
 export default function Home() {
+  const [counter, setCounter] = useState<number>(0)
+  const count = (c: number): number => { console.log(c, counter); setCounter(counter + c); return counter + c }
+  // const globalCount: CountType = {
+  //   counter,
+  //   count
+  // }
+
+  // interface CountType {
+  //   counter: number;
+  //   count: Function;
+  // };
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
+      {/* <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
+          <code className="font-mono font-bold underline">src/app/page.tsx</code>
         </p>
         <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
           <a
@@ -15,16 +33,28 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            By{' '} */}
+      <div className='flex p-24 w-auto justify-between container'>
+        <p className='text-2xl leading-tight mb-12 rounded-lg py-3 ps-4 pe-5 font-display text-brown-50'>Test</p>
+      </div>
+      <Context.Provider value={counter}></Context.Provider>
+      <div className='flex flex-3'>
+        <BookItem count={count}></BookItem>
+        <BookItem count={count}></BookItem>
+        <BookItem count={count}></BookItem>
+      </div>
+      <Image
+        src="/vercel.svg"
+        alt="Vercel Logo"
+        className="dark:invert"
+        width={100}
+        height={24}
+        priority
+        unoptimized
+      />
+      <button className='bg-blue-500 hover:bg-blue-600 p-1 rounded-s text-blue-50 transition-colors text-xl'>Click</button>
+      <Counter count={6} />
+      {/* </a>
         </div>
       </div>
 
@@ -107,7 +137,7 @@ export default function Home() {
             Instantly deploy your Next.js site to a shareable URL with Vercel.
           </p>
         </a>
-      </div>
+      </div> */}
     </main>
   )
 }
