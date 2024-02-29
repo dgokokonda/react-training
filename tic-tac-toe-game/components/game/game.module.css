@@ -1,0 +1,89 @@
+.App {
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .test {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-header p {
+  position: relative;
+  top: 50px;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.game {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: calc(50% - 50px);
+  left: calc(50% - 50px);
+  background: white;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  border: 4px solid lightgrey;
+}
+
+.game-item {
+  display: flex;
+  flex: 30%;
+  align-items: center;
+  justify-content: center;
+  height: 33.33px;
+  min-width: 33.33px;
+}
+
+.game-step {
+  position: absolute;
+  top: calc(50% - 120px);
+  color: white;
+  left: calc(50% - 25px);
+}
+
+.game-step span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+span.symbol.symbol--x {
+  color: red;
+  font-size: 200%;
+}
+
+span.symbol.symbol--o {
+  color: green;
+  font-size: 200%;
+}
+
+.reset-btn {
+  position: absolute;
+  top: 60%;
+  left: calc(50% - 25px);
+  background-color: lightgray;
+  color: darkblue;
+  font-weight: bold;
+}

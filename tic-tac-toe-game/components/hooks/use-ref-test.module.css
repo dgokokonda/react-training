@@ -1,0 +1,12 @@
+.wrap {
+  width: 300px;
+  overflow: hidden;
+}
+
+.wrap ul {
+  width: 500px;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  overflow: hidden;
+}
