@@ -59,11 +59,21 @@ button:disabled {
   cursor: default;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="email"],
+input[type="password"] {
   background-color: white;
   outline: none;
   border-radius: 4px;
   color: black;
   margin: 4px;
   padding: 4px;
+}
+
+label+input.validate {
+  margin-left: 12px;
+}
+
+input.error {
+  border-bottom: 2px solid var(--color-red-600);
 }
