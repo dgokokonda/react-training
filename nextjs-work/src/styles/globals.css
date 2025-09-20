@@ -26,12 +26,12 @@ body {
   margin: 4px;
 }
 
-.light, .light form, .light *:not(button) {
+.light, .light form, .light label, .light input {
   background-color: var(--color-blue-50);
   color: var(--color-blue-950);
 }
 
-.dark, .dark form, .dark * {
+.dark, .dark form, .dark label, .dark input {
   background-color: var(--color-blue-950);
   color: var(--color-blue-50);
 }
