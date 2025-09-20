@@ -1,7 +1,8 @@
-import { useState, useActionState } from "react";
+import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import { fakeLogin } from "../api/login";
 import * as Yup from "yup";
+import { Formik, Field, Form } from "formik";
 
 const SubmitButton = ({ loading }) => {
   const { pending /*, data, method, action */ } = useFormStatus(); // form status
@@ -17,13 +18,13 @@ const SubmitButton = ({ loading }) => {
 
 export default function Auth() {
   // work with form state - only param of state!
-  const [state, submitAction] = useActionState(auth, {
+  const [state, setState] = useState({
     data: null,
     error: null,
   });
-  const [errors, setErrors] = useState({});
+  // const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const formSchema = Yup.object({
+  const formSchema = Yup.object().shape({
     username: Yup.string()
       .nullable()
       .min(3, "Длина должна быть не менее 3 символов")
@@ -38,90 +39,103 @@ export default function Auth() {
       .required("Обязательно для заполнения"),
   });
 
-  const validateField = async (el) => {
-    const { name, value } = el.target;
-    try {
-      await formSchema.validateAt(name, { [name]: value });
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    } catch (error) {
-      setErrors((prev) => ({ ...prev, [name]: error.message }));
-    }
-  };
+  // const validateField = async (el) => {
+  //   const { name, value } = el.target;
+  //   try {
+  //     await formSchema.validateAt(name, { [name]: value });
+  //     // setErrors((prev) => ({ ...prev, [name]: "" }));
+  //   } catch (error) {
+  //     // setErrors((prev) => ({ ...prev, [name]: error.message }));
+  //   }
+  // };
 
-  async function auth(prevState, formData) {
-    const email = formData.get("email");
-    const password = formData.get("password");
-    const username = formData.get("username");
-
-    setErrors({});
+  async function handleSubmit(formData, { setSubmitting, resetForm }) {
+    // setErrors({});
     setLoading(true);
+    setState({ data: null, error: null });
 
     try {
-      await formSchema.validate(
-        { username, email, password },
-        { abortEarly: false }
-      );
-      const response = await fakeLogin({ email, password, username });
-      setLoading(false);
-      return {
-        data: response,
-        error: null,
-      };
+      await formSchema.validate(formData, { abortEarly: false });
+      const response = await fakeLogin(formData);
+      setState({ data: response, error: null });
+      resetForm();
     } catch (error) {
-      const validationErrors = {};
-      error.inner.forEach((fieldError) => {
-        validationErrors[fieldError.path] = fieldError.message;
-      });
-      setErrors(validationErrors);
+      if (error.name === "ValidationError") {
+        // Formik сам обработает ошибки валидации
+        throw error;
+      } else {
+        setState({ data: null, error: error.message });
+      }
+      // setErrors(validationErrors);
+    } finally {
       setLoading(false);
-      return { ...prevState, error: error.message };
+      setSubmitting(false);
     }
   }
 
   return (
-    <form
-      action={submitAction}
-      className="flex flex-col justify-center items-center h-dvh"
+    <Formik
+      initialValues={{
+        email: "",
+        username: "",
+        password: "",
+      }}
+      validationSchema={formSchema}
+      onSubmit={handleSubmit}
     >
-      <div className="input-field flex flex-col items-center mb-2">
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          name="username"
-          id="username"
-          onChange={validateField}
-          className={errors.username ? "validate w-60 error" : "validate w-60"}
-        />
-        {errors.username && <p className="text-red-600">{errors.username}</p>}
-      </div>
-      <div className="input-field flex flex-col items-center mb-2">
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          name="email"
-          id="email"
-          onChange={validateField}
-          className={errors.email ? "validate w-60 error" : "validate w-60"}
-        />
-        {errors.email && <p className="text-red-600">{errors.email}</p>}
-      </div>
-      <div className="input-field flex flex-col items-center">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          onChange={validateField}
-          className={errors.password ? "validate w-60 error" : "validate w-60"}
-        />
-        {errors.password && <p className="text-red-600">{errors.password}</p>}
-      </div>
-      <div className="buttons mt-4">
-        <SubmitButton loading={loading}></SubmitButton>
-      </div>
-      {state.data && (
-        <p className="text-green-500 m-10">{state.data.username} logged in</p>
+      {({ errors, touched, isSubmitting }) => (
+        <Form className="flex flex-col justify-center items-center h-dvh">
+          <div className="input-field flex flex-col items-center mb-2">
+            <label htmlFor="username">Username</label>
+            <Field
+              type="text"
+              name="username"
+              id="username"
+              className={
+                errors.username ? "validate w-60 error" : "validate w-60"
+              }
+            />
+            {errors.username && touched.username && (
+              <p className="text-red-600">{errors.username}</p>
+            )}
+          </div>
+          <div className="input-field flex flex-col items-center mb-2">
+            <label htmlFor="email">Email</label>
+            <Field
+              type="text"
+              name="email"
+              id="email"
+              className={errors.email ? "validate w-60 error" : "validate w-60"}
+            />
+            {errors.email && touched.email && (
+              <p className="text-red-600">{errors.email}</p>
+            )}
+          </div>
+          <div className="input-field flex flex-col items-center">
+            <label htmlFor="password">Password</label>
+            <Field
+              type="password"
+              name="password"
+              id="password"
+              className={
+                errors.password ? "validate w-60 error" : "validate w-60"
+              }
+            />
+            {errors.password && touched.password && (
+              <p className="text-red-600">{errors.password}</p>
+            )}
+          </div>
+          <div className="buttons mt-4">
+            <SubmitButton loading={loading || isSubmitting}></SubmitButton>
+          </div>
+          {state.error && <p className="text-red-500 m-10">{state.error}</p>}
+          {state.data && (
+            <p className="text-green-500 m-10">
+              {state.data.username} logged in
+            </p>
+          )}
+        </Form>
       )}
-    </form>
+    </Formik>
   );
 }
