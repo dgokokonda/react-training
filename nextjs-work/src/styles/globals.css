@@ -26,6 +26,16 @@ body {
   margin: 4px;
 }
 
+.light, .light form, .light *:not(button) {
+  background-color: var(--color-blue-50);
+  color: var(--color-blue-950);
+}
+
+.dark, .dark form, .dark * {
+  background-color: var(--color-blue-950);
+  color: var(--color-blue-50);
+}
+
 
 a:hover {
   color: var(--color-orange-400);
