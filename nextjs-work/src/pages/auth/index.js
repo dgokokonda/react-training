@@ -65,14 +65,16 @@ const FormField = memo(
 
 FormField.displayName = "FormField";
 
-const StatusMessage = ({ state }) => (
+const StatusMessage = memo(({ state }) => (
   <>
     {state.error && <p className="text-red-500 m-10">{state.error}</p>}
     {state.data && (
       <p className="text-green-500 m-10">{state.data.username} logged in</p>
     )}
   </>
-);
+));
+
+StatusMessage.displayName = "StatusMessage";
 
 export default function Auth() {
   const [state, setState] = useState({
@@ -83,6 +85,7 @@ export default function Auth() {
   const handleSubmit = useCallback(
     async (formData, { setSubmitting, resetForm }) => {
       setState({ data: null, error: null });
+      const abortController = new AbortController();
 
       try {
         await FORM_SCHEMA.validate(formData, { abortEarly: false });
@@ -95,6 +98,10 @@ export default function Auth() {
         setState({ data: response, error: null });
         resetForm();
       } catch (error) {
+        if (error.name === "AbortError") {
+          return; // Запрос был отменен
+        }
+
         if (error.name === "ValidationError") {
           // Formik сам обработает ошибки валидации
           throw error;
@@ -106,6 +113,8 @@ export default function Auth() {
       } finally {
         setSubmitting(false);
       }
+
+      return () => abortController.abort();
     },
     []
   );
@@ -115,35 +124,46 @@ export default function Auth() {
       initialValues={INITIAL_VALUES}
       validationSchema={FORM_SCHEMA}
       onSubmit={handleSubmit}
+      validateOnBlur={true}
+      validateOnChange={true}
+      debounce={300}
     >
       {({ errors, touched, isSubmitting }) => (
-        <Form className="flex flex-col justify-center items-center h-dvh">
-          <FormField
-            key="username"
-            name="username"
-            label="Username"
-            errors={errors}
-            touched={touched}
-            isSubmitting={isSubmitting}
-          />
-          <FormField
-            key="email"
-            name="email"
-            label="Email"
-            type="email"
-            errors={errors}
-            touched={touched}
-            isSubmitting={isSubmitting}
-          />
-          <FormField
-            key="password"
-            name="password"
-            type="password"
-            label="Password"
-            errors={errors}
-            touched={touched}
-            isSubmitting={isSubmitting}
-          />
+        <Form
+          className="flex flex-col justify-center items-center h-dvh"
+          aria-labelledby="form-title"
+        >
+          <h2 id="form-title" className="sr-only">
+            Форма авторизации
+          </h2>
+          <fieldset disabled={isSubmitting} className="border-none">
+            <FormField
+              key="username"
+              name="username"
+              label="Username"
+              errors={errors}
+              touched={touched}
+              isSubmitting={isSubmitting}
+            />
+            <FormField
+              key="email"
+              name="email"
+              label="Email"
+              type="email"
+              errors={errors}
+              touched={touched}
+              isSubmitting={isSubmitting}
+            />
+            <FormField
+              key="password"
+              name="password"
+              type="password"
+              label="Password"
+              errors={errors}
+              touched={touched}
+              isSubmitting={isSubmitting}
+            />
+          </fieldset>
           <div className="buttons mt-4">
             <SubmitButton isSubmitting={isSubmitting}></SubmitButton>
           </div>
