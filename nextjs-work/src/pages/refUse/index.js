@@ -1,17 +1,27 @@
 // use ref - React 19 (we don't need for forwardRef anymore)
 import { useImperativeHandle, useRef } from "react";
 
-const AppInput = ({ ref }) => {
+const AppInput = ({ props, ref }) => {
   const inputRef = useRef();
 
-  useImperativeHandle(ref, () => ({ focus: () => inputRef.current.focus() }));
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      } else {
+        console.warn("Input ref is not available");
+      }
+    },
+  }));
 
   return (
     <div className="input-field">
-      <input ref={inputRef}></input>
+      <input ref={inputRef} {...props} />
     </div>
   );
 };
+
+AppInput.displayName = "AppInput";
 
 export default function RefExample() {
   const ref = useRef();

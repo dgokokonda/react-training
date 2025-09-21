@@ -1,8 +1,15 @@
-import { useRef, useState, useOptimistic } from "react";
+import {
+  useRef,
+  useState,
+  useOptimistic,
+  useEffect,
+  useTransition,
+} from "react";
 
 export default function OptimisticMessage() {
   const formRef = useRef();
   const [messages, setMessages] = useState([]);
+  const [isPending, startTransition] = useTransition();
   // убирает визуальную задержку в обработке ответа:
   const [optimisticMessages, addOptimisticMessages] = useOptimistic(
     messages,
@@ -18,12 +25,35 @@ export default function OptimisticMessage() {
   }
 
   async function formAction(formData) {
-    addOptimisticMessages(formData.get("message"));
-    formRef.current.reset();
-    const message = await sendMessage(formData.get("message"));
+    startTransition(async () => {
+      const newMsg = formData.get("message").trim();
 
-    setMessages((messages) => [...messages, { text: message, pending: false }]);
+      if (!newMsg) return;
+
+      addOptimisticMessages(newMsg);
+      formRef.current?.reset();
+
+      try {
+        const message = await sendMessage(newMsg);
+        setMessages((messages) => [
+          ...messages,
+          { text: message, pending: false, id: Date.now() },
+        ]);
+      } catch (error) {
+        setMessages((messages) =>
+          messages.filter((m) => m.text !== newMessage)
+        );
+        console.error("Failed to send message:", error);
+      }
+    });
   }
+
+  useEffect(() => {
+    // Очищаем pending сообщения при размонтировании
+    return () => {
+      setMessages((messages) => messages.filter((m) => !m.pending));
+    };
+  }, []);
 
   return (
     <form
@@ -35,11 +65,11 @@ export default function OptimisticMessage() {
         <input name="message"></input>
       </div>
       <button type="submit" className="btn">
-        Send
+        {isPending ? "Sending..." : "Send"}
       </button>
       <ul className="collection">
         {optimisticMessages.map((msg, i) => (
-          <li className="collection-item" key={i}>
+          <li className="collection-item" key={msg.id || i}>
             {msg.text} {msg.pending && <small>( Adding )</small>}
           </li>
         ))}

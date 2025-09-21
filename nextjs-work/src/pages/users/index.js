@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 // import axios from "axios";
 
 // const fetchUsers = fetch("https://jsonplaceholder.typicode.com/users").then(
@@ -22,6 +22,7 @@ export default function Users() {
       : "https://jsonplaceholder.typicode.com/users";
 
     const searchTimer = setTimeout(() => {
+      // таймер для визуализации долгого запроса и показа состояния загрузки
       try {
         fetch(url, {
           signal: abortController?.signal,
@@ -49,17 +50,17 @@ export default function Users() {
     setSearchedText(search);
   };
 
-  const sortByAsc = () => {
+  const sortByAsc = useCallback(() => {
     setFilteredUsers((list) =>
       [...list].sort((a, b) => a.name.localeCompare(b.name))
     );
-  };
+  }, []);
 
-  const sortByDesc = () => {
+  const sortByDesc = useCallback(() => {
     setFilteredUsers((list) =>
       [...list].sort((a, b) => b.name.localeCompare(a.name))
     );
-  };
+  }, []);
 
   return (
     <>
