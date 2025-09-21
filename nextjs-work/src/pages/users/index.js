@@ -1,4 +1,5 @@
 import { use, useCallback, useEffect, useState } from "react";
+import useInput from "@/hooks/useInput";
 // import axios from "axios";
 
 // const fetchUsers = fetch("https://jsonplaceholder.typicode.com/users").then(
@@ -13,6 +14,7 @@ export default function Users() {
   // const users = use(fetchUsers); // use Promise or Context
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchedText, setSearchedText] = useState("");
+  const input = useInput(); // Применение кастомного хука
 
   // useEffect(() => setFilteredUsers(users), []);
   useEffect(() => {
@@ -64,6 +66,9 @@ export default function Users() {
 
   return (
     <>
+      <input type="text" {...input} />
+      {/* <input type="text" value={input.value} onChange={input.onChange} /> */}
+      <h6>{input.value}</h6>
       <input
         type="text"
         name="search"
