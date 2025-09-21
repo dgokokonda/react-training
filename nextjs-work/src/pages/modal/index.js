@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Modal from "@/components/Modal/Modal";
+import Watch from "@/components/Watch/Watch";
 
 export default function ModalPage() {
   const [show, setShow] = useState(false);
@@ -10,6 +11,7 @@ export default function ModalPage() {
         <h3>Modal Subtitle</h3>
         <button onClick={() => setShow(false)}>Close</button>
       </Modal>
+      <Watch />
     </>
   );
 }
