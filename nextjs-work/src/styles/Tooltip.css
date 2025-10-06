@@ -1,0 +1,129 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.demo-area {
+  position: relative;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  margin: 30px 0;
+  background: #f9f9f9;
+}
+
+.target-button {
+  padding: 20px 30px;
+  font-size: 18px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.target-button:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+.tooltip {
+  background: #333;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  max-width: 250px;
+  z-index: 1000;
+  transition: all 0.2s ease-out;
+}
+
+.tooltip-content {
+  margin-bottom: 8px;
+}
+
+.tooltip-info {
+  font-size: 12px;
+  color: #aaa;
+  border-top: 1px solid #555;
+  padding-top: 5px;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+/* Стрелка для позиции сверху */
+.tooltip-top .tooltip-arrow {
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 10px 0 10px;
+  border-color: #333 transparent transparent transparent;
+}
+
+/* Стрелка для позиции снизу */
+.tooltip-bottom .tooltip-arrow {
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent #333 transparent;
+}
+
+/* Стрелка для позиции слева */
+.tooltip-left .tooltip-arrow {
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent #333;
+}
+
+/* Стрелка для позиции справа */
+.tooltip-right .tooltip-arrow {
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 10px 10px 10px 0;
+  border-color: transparent #333 transparent transparent;
+}
+
+.explanation {
+  background: #e3f2fd;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.test-cases {
+  background: #f3e5f5;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.test-cases ul {
+  list-style: none;
+  padding: 0;
+}
+
+.test-cases li {
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.test-cases li::before {
+  content: "•";
+  margin-right: 10px;
+  color: #7b1fa2;
+}
