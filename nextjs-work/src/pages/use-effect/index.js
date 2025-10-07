@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import "./Timer.css";
+// import "./timer.css";
 
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState(60); // 60 секунд
