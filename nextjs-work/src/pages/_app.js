@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
-import "@/styles/Tooltip.css";
-import "@/styles/DraggableList.css";
+import "@/styles/tooltip.css";
+import "@/styles/draggable-list.css";
+import "@/styles/advanced-form.css";
 import { useState, createContext, useEffect, useCallback } from "react";
 
 export const ThemeContext = createContext(null);
