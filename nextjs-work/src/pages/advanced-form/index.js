@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import { LazySelect } from "@/components/Select/Select";
+import { mockLoadOptions } from "@/mock/mockData";
 
 export default function AdvancedForm() {
   const [formData, setFormData] = useState({
@@ -19,6 +21,7 @@ export default function AdvancedForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState("");
   const selectRef = useRef(null);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   // Маска для телефона
   const formatPhone = (value) => {
@@ -405,6 +408,13 @@ export default function AdvancedForm() {
           <label htmlFor="country" className="form-label">
             Страна *
           </label>
+          <LazySelect
+            value={selectedOption}
+            onChange={setSelectedOption}
+            placeholder="Выберите опцию..."
+            loadOptions={mockLoadOptions}
+            optionsHeight={250}
+          />
           <select
             ref={selectRef}
             id="country"
