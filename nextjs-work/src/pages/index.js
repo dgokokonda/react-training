@@ -28,6 +28,32 @@ export default function Home() {
           height={38}
           priority
         />
+
+        <h3>Блог:</h3>
+        <ul>
+          <li>
+            <Link href="/blog/first-post">Первый пост</Link>
+          </li>
+          <li>
+            <Link href="/blog/react-tutorial">React Tutorial</Link>
+          </li>
+          <li>
+            <Link href="/blog/nextjs-guide">Next.js Guide</Link>
+          </li>
+        </ul>
+
+        <h3>Пользователи:</h3>
+        <ul>
+          <li>
+            <Link href="/users/1">Пользователь 1</Link>
+          </li>
+          <li>
+            <Link href="/users/2">Пользователь 2</Link>
+          </li>
+          <li>
+            <Link href="/users/1/posts/5">Пост 5 пользователя 1</Link>
+          </li>
+        </ul>
       </main>
     </div>
   );

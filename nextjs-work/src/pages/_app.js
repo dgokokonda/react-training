@@ -58,6 +58,15 @@ export default function App({ Component, pageProps }) {
         Тема: {theme === "dark" ? "🌙" : "☀️"}
       </button>
       <Component {...pageProps} />
+      <nav
+        style={{ marginBottom: "20px", padding: "10px", background: "#f5f5f5" }}
+      >
+        <h1>Next.js Dynamic Routes Demo</h1>
+        <a href="/blog" style={{ marginRight: "15px" }}>
+          Блог
+        </a>
+        {/* <a href="/users" style={{ marginRight: '15px' }}>Пользователи</a> */}
+      </nav>
     </ThemeContext.Provider>
   );
 }
